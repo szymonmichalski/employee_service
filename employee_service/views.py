@@ -1,14 +1,11 @@
 import json
 
-import logging
 from flask import (
     render_template,
     request,
-    redirect,
-    session,
 )
 
-from employee_service.utils import get_employees
+from employee_service.utils import EmployeeHandler
 from employee_service.application import (
     app,
 )
@@ -23,17 +20,19 @@ def homepage():
 
 @app.route('/employee', methods=['GET', 'POST', 'DELETE'])
 def employee():
-    id = request.args.get('id')
+    employee_id = request.args.get('id')
     name = request.args.get('name')
     surname = request.args.get('surname')
     email = request.args.get('email')
+    employee_handler = EmployeeHandler()
     if request.method == 'DELETE':
-        pass
+        return employee_handler.delete_employee(
+            employee_id, name, surname, email)
     elif request.method == 'POST':
-        pass
+        return employee_handler.add_employee(name, surname, email)
     else:
         return json.dumps(
             {
-                'employees': get_employees(email)
+                'employees': employee_handler.get_employees(email)
             }
         )
