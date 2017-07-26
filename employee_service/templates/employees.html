@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+<ul>
+    {% for employee in employees %}
+        <li>
+            @{{ employee['id'] }} -
+            {{ employee['name'] }}
+            {{ employee['surname'] }} -
+            {{ employee['email'] }}
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
