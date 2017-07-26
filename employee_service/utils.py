@@ -10,4 +10,4 @@ def get_employees(email):
     else:
         employees = list(
             db.session.query(Employee).all())
-    return employees
+    return [item.serialize for item in employees]

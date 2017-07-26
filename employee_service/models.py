@@ -16,6 +16,12 @@ class Employee(db.Model):
         self.name = name
         self.surname = surname
         self.email = email
-    #
-    # def __repr__(self):
-    #     return '<Employee %r>' % self.follower_follower_name
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'surname': self.surname,
+            'email': self.email,
+        }

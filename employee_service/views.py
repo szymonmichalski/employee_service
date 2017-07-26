@@ -1,3 +1,6 @@
+import json
+
+import logging
 from flask import (
     render_template,
     request,
@@ -5,7 +8,7 @@ from flask import (
     session,
 )
 
-from employee_service.common import get_employees
+from employee_service.utils import get_employees
 from employee_service.application import (
     app,
 )
@@ -29,8 +32,8 @@ def employee():
     elif request.method == 'POST':
         pass
     else:
-        employees = get_employees(email)
-        return render_template(
-            'employees.html',
-            employees=employees,
+        return json.dumps(
+            {
+                'employees': get_employees(email)
+            }
         )
