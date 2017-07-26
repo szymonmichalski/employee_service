@@ -19,7 +19,11 @@ def homepage():
 
 
 @app.route('/employee', methods=['GET', 'POST', 'DELETE'])
-def employee(id = None, name=None, surname=None, email=None):
+def employee():
+    id = request.args.get('id')
+    name = request.args.get('name')
+    surname = request.args.get('surname')
+    email = request.args.get('email')
     if request.method == 'DELETE':
         pass
     elif request.method == 'POST':
