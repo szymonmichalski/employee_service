@@ -4,6 +4,7 @@ from flask import (
     render_template,
     request,
 )
+from http import HTTPStatus
 
 from employee_service.utils import EmployeeHandler
 from employee_service.application import (
@@ -35,4 +36,4 @@ def employee():
             {
                 'employees': employee_handler.get_employees(email)
             }
-        )
+        ), HTTPStatus.OK

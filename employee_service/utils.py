@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from sqlalchemy.exc import IntegrityError
 from validate_email import validate_email
 
@@ -23,9 +25,15 @@ class EmployeeHandler:
                 employee = self.find_one_employee(
                     employee_id, name, surname, email)
             except NoResultFound:
-                return 'Error: no such employee in the database.'
+                return (
+                    'Error: no such employee in the database.',
+                    HTTPStatus.NOT_FOUND,
+                )
         else:
-            return 'Error: not enough parameters.'
+            return (
+                'Error: not enough parameters.',
+                HTTPStatus.BAD_REQUEST,
+            )
         try:
             employee_id = employee.id
             name = employee.name
@@ -34,11 +42,16 @@ class EmployeeHandler:
 
             db.session.delete(employee)
             db.session.commit()
-            return 'Employee {} {} with email {} and id {} deleted.'.format(
-                name, surname, email, employee_id,
+            return (
+                'Employee {} {} with email {} and id {} deleted.'.format(
+                    name, surname, email, employee_id),
+                HTTPStatus.OK,
             )
         except Exception:
-            return 'Employee was not deleted.'
+            return (
+                'Employee was not deleted.',
+                HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
 
     def find_one_employee(self, employee_id, name, surname, email):
         try:
@@ -56,17 +69,32 @@ class EmployeeHandler:
             try:
                 self.validate_email(email)
                 self.add_employee_to_db(name, surname, email)
-                return 'Employee {} {} with mail {} was added.'.format(
-                    name, surname, email)
+                return (
+                    'Employee {} {} with mail {} was added.'.format(
+                        name, surname, email),
+                    HTTPStatus.CREATED,
+                )
             except ValueError:
-                return 'Error: email is not correct.'
+                return (
+                    'Error: email is not correct.',
+                    HTTPStatus.BAD_REQUEST,
+                )
             except IntegrityError:
-                return 'Error: such email already exists in the database.'
+                return (
+                    'Error: such email already exists in the database.',
+                    HTTPStatus.CONFLICT,
+                )
             except Exception:
-                return 'Error: Employee {} {} with mail {} was not added.' \
-                       ''.format(name, surname, email)
+                return (
+                    'Error: Employee {} {} with mail {} was not added.'.format(
+                        name, surname, email),
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                )
         else:
-            return 'Error: Employee not added due to missing arguments.'
+            return (
+                'Error: Employee not added due to missing arguments.',
+                HTTPStatus.BAD_REQUEST,
+            )
 
     def add_employee_to_db(self, name, surname, email):
         employee = Employee(name, surname, email)
