@@ -1,3 +1,5 @@
+from validate_email import validate_email
+
 from employee_service.application import db
 from employee_service.models import Employee
 from sqlalchemy.orm.exc import NoResultFound
@@ -50,11 +52,13 @@ class EmployeeHandler:
 
     def add_employee(self, name, surname, email):
         if name and surname and email:
-            # validate email
             try:
+                self.validate_email(email)
                 self.add_employee_to_db(name, surname, email)
                 return 'Employee {} {} with mail {} was added.'.format(
                     name, surname, email)
+            except ValueError:
+                return 'Error: email is not correct.'
             except Exception:
                 return 'Error: Employee {} {} with mail {} was not added.' \
                        ''.format(name, surname, email)
@@ -65,3 +69,8 @@ class EmployeeHandler:
         employee = Employee(name, surname, email)
         db.session.add(employee)
         db.session.commit()
+
+    def validate_email(self, email):
+        is_valid = validate_email(email)
+        if not is_valid:
+            raise ValueError
