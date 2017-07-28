@@ -1,3 +1,4 @@
+import json
 from http import HTTPStatus
 
 from sqlalchemy.exc import IntegrityError
@@ -17,7 +18,15 @@ class EmployeeHandler:
         else:
             employees = list(
                 db.session.query(Employee).all())
-        return [item.serialize for item in employees]
+        employees = [item.serialize for item in employees]
+        return (
+            json.dumps(
+                {
+                    'employees': employees
+                }
+            ),
+            HTTPStatus.OK,
+        )
 
     def delete_employee(self, employee_id, name, surname, email):
         if employee_id or name and surname and email:

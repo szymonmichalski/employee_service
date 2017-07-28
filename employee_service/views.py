@@ -32,8 +32,4 @@ def employee():
     elif request.method == 'POST':
         return employee_handler.add_employee(name, surname, email)
     else:
-        return json.dumps(
-            {
-                'employees': employee_handler.get_employees(email)
-            }
-        ), HTTPStatus.OK
+        return employee_handler.get_employees(email)
