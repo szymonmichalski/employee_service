@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from validate_email import validate_email
 
 from employee_service.application import db
@@ -59,6 +60,8 @@ class EmployeeHandler:
                     name, surname, email)
             except ValueError:
                 return 'Error: email is not correct.'
+            except IntegrityError:
+                return 'Error: such email already exists in the database.'
             except Exception:
                 return 'Error: Employee {} {} with mail {} was not added.' \
                        ''.format(name, surname, email)
