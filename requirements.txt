@@ -3,5 +3,5 @@ Flask-MySQL==1.4.0
 Flask-SQLAlchemy==2.3.2
 PyMySQL==0.9.3
 SQLAlchemy==1.3.2
-mysqlclient==1.4.2.post1
+mysqlclient==1.4.5
 validate_email==1.3
